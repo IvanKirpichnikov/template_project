@@ -1,0 +1,11 @@
+[server]
+host = "0.0.0.0"
+port = 8080
+access_log = true
+
+[database]
+url = "postgresql+psycopg://username:password@host:post/database"
+
+[access_token]
+crypto_key = "..."
+expires_in = 86400
