@@ -39,7 +39,7 @@ class UserSignUpInteractor:
             hashed_password=hashed_password,
         )
         access_token = self.access_token_factory.execute(user.id)
-        crypted_access_token = self.access_token_cryptographer.crypto(access_token)
+        crypted_access_token = self.access_token_cryptographer.crypto(access_token.id)
 
         response = UserSignUpResponse(access_token=crypted_access_token)
 
