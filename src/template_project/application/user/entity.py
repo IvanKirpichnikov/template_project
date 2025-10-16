@@ -8,6 +8,7 @@ from template_project.application.common.entity import Entity, to_entity
 
 UserId = NewType("UserId", UUID)
 
+
 @to_entity
 class User(Entity[UserId]):
     email: str

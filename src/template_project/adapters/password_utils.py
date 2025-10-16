@@ -1,4 +1,3 @@
-from abc import abstractmethod
 from typing import override
 
 import argon2
@@ -27,7 +26,7 @@ class ArgonPasswordVerifying(PasswordVerifying):
     ) -> None:
         self._password_hasher = password_hasher
 
-    @abstractmethod
+    @override
     def verify(
         self,
         verifiable_password: SecretString,
@@ -35,6 +34,5 @@ class ArgonPasswordVerifying(PasswordVerifying):
     ) -> bool:
         try:
             return self._password_hasher.verify(hashed_password, verifiable_password.get_value())
-        except Argon2Error as e:
+        except Argon2Error:
             return False
-

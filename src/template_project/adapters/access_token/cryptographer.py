@@ -6,7 +6,6 @@ from cryptography.fernet import Fernet
 from template_project.application.access_token.cryptographer import AccessTokenCryptographer
 from template_project.application.access_token.entity import AccessTokenId
 
-
 type RawAccessToken = str
 
 

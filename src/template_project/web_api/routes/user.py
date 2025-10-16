@@ -6,7 +6,6 @@ from pydantic import BaseModel, SecretStr
 from template_project.application.common.containers import SecretString
 from template_project.application.user.interactors.sign_up import UserSignUpInteractor
 
-
 router = APIRouter(route_class=DishkaRoute)
 
 
@@ -25,8 +24,7 @@ async def sign_up(
     interactor: FromDishka[UserSignUpInteractor],
 ) -> UserSignUpResponse:
     response_interactor = await interactor.execute(
-        email=request.email,
-        password=SecretString(request.password.get_secret_value())
+        email=request.email, password=SecretString(request.password.get_secret_value())
     )
     return UserSignUpResponse(
         access_token=response_interactor.access_token,

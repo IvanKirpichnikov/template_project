@@ -1,4 +1,5 @@
 from typing import override
+
 from template_project.application.access_token.entity import AccessToken
 from template_project.application.access_token.entity_factory import AccessTokenFactory
 from template_project.application.user.entity import UserId

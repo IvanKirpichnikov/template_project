@@ -1,4 +1,5 @@
-from typing import override
+from typing import cast, override
+
 from sqlalchemy import exists, select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -13,7 +14,7 @@ class DefaultUserDataGateway(UserDataGateway):
 
     @override
     async def load_with_id(self, id_: UserId) -> User | None:
-        statement = select(User).where(user_table.c.id==id_)
+        statement = select(User).where(user_table.c.id == id_)
         result = await self._session.execute(statement)
         return result.scalar_one_or_none()
 
@@ -24,4 +25,4 @@ class DefaultUserDataGateway(UserDataGateway):
         result_fetchone = result.fetchone()
         if result_fetchone is None:
             return False
-        return result_fetchone[0]
+        return cast(bool, result_fetchone[0])

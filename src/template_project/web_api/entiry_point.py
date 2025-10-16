@@ -1,16 +1,16 @@
 import argparse
 import asyncio
+import sys
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from pathlib import Path
-import sys
 from typing import Final
 
+import uvicorn
 from dishka import AsyncContainer
 from dishka.integrations.fastapi import setup_dishka
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-import uvicorn
 
 from template_project.web_api.configuration import load_configuration
 from template_project.web_api.ioc.make import make_ioc
@@ -35,10 +35,12 @@ LOG_CONFIG: Final = {
     },
 }
 
+
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     yield
     await app.state.dishka_container.close()
+
 
 def make_asgi_application(
     ioc: AsyncContainer,
@@ -65,6 +67,7 @@ def make_asgi_application(
 
     return app
 
+
 def _main(
     configuration_path: Path,
 ) -> None:
@@ -83,7 +86,8 @@ def _main(
 
 def main() -> None:
     if sys.platform == "win32":
-        from asyncio import WindowsSelectorEventLoopPolicy
+        from asyncio import WindowsSelectorEventLoopPolicy  # noqa: PLC0415
+
         asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())
 
     arg_parser = argparse.ArgumentParser()
@@ -94,6 +98,7 @@ def main() -> None:
 
     args = arg_parser.parse_args()
     _main(args.configuration)
+
 
 if __name__ == "__main__":
     main()

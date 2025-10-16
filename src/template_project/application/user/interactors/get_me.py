@@ -11,6 +11,7 @@ class GetMeResponse:
     id: UserId
     email: str
 
+
 response_converter = get_converter(User, GetMeResponse)
 
 

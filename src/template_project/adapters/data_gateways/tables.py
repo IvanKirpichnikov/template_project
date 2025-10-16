@@ -10,7 +10,6 @@ from sqlalchemy.orm import registry
 from template_project.application.access_token.entity import AccessToken
 from template_project.application.user.entity import User
 
-
 meta_data = MetaData()
 
 user_table = Table(

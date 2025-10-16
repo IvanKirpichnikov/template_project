@@ -1,4 +1,5 @@
 from typing import override
+
 from template_project.application.common.errors import ApplicationError, to_error
 
 
@@ -9,6 +10,7 @@ class UserWithEmailAlreadyExistsError(ApplicationError):
     @override
     def __str__(self) -> str:
         return f"User with the email={self.email!r} already exists"
+
 
 @to_error
 class UserUnauthorizedError(ApplicationError):

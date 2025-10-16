@@ -7,7 +7,7 @@ from typing import dataclass_transform
     eq_default=False,
     kw_only_default=True,
 )
-def to_interactor[_InteractorClsT](interactor_cls: type[_InteractorClsT]) -> type[_InteractorClsT]:
+def to_interactor[InteractorClsT](interactor_cls: type[InteractorClsT]) -> type[InteractorClsT]:
     return dataclass(
         kw_only=True,
         eq=False,

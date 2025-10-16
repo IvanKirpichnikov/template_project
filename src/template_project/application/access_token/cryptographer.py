@@ -3,7 +3,6 @@ from typing import Protocol
 
 from template_project.application.access_token.entity import AccessTokenId
 
-
 type RawAccessToken = str
 
 

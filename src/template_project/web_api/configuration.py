@@ -3,6 +3,7 @@ from datetime import timedelta
 from pathlib import Path
 from tomllib import loads
 from typing import dataclass_transform
+
 from adaptix import P, Retort, loader
 
 from template_project.application.common.containers import SecretString

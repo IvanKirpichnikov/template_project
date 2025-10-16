@@ -1,4 +1,4 @@
-from abc import abstractmethod
+from typing import override
 
 from fastapi import Request
 
@@ -11,8 +11,7 @@ from template_project.application.user.data_gateway import UserDataGateway
 from template_project.application.user.entity import User
 from template_project.application.user.errors import UserUnauthorizedError
 
-
-TOKEN_TYPE = "Bearer"
+TOKEN_TYPE = "Bearer"  # noqa: S105
 BEARER_SECTIONS = 2
 AUTH_HEADER = "Authorization"
 
@@ -31,7 +30,7 @@ class WebApiIdentityProvider(IdentityProvider):
         self._access_token_data_gateway = access_token_data_gateway
         self._access_token_cryptographer = access_token_cryptographer
 
-    @abstractmethod
+    @override
     async def get_current_user(self) -> User:
         auth_tokn = self._request.headers[AUTH_HEADER]
 

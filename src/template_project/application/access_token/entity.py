@@ -10,6 +10,7 @@ from template_project.application.user.entity import UserId
 
 AccessTokenId = NewType("AccessTokenId", UUID)
 
+
 @to_entity
 class AccessToken(Entity[AccessTokenId]):
     user_id: UserId
@@ -32,17 +33,12 @@ class AccessToken(Entity[AccessTokenId]):
             revoked=False,
         )
 
-
     def ensure_expired(self) -> None:
         if self.expired_predicate():
             raise AccessTokenExpiredError(id_=self.id)
 
     def expired_predicate(self) -> bool:
-        return (
-            (self.expires_in < datetime.now(tz=UTC))
-            or self.revoked
-            or self.deleted_at is not None
-        )
+        return (self.expires_in < datetime.now(tz=UTC)) or self.revoked or self.deleted_at is not None
 
     def revoke(self) -> None:
         self.revoked = True

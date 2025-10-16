@@ -10,8 +10,5 @@ class UserDataGateway(Protocol):
         raise NotImplementedError
 
     @abstractmethod
-    async def exists_by_email(
-        self,
-        email: str
-    ) -> bool:
+    async def exists_by_email(self, email: str) -> bool:
         raise NotImplementedError
