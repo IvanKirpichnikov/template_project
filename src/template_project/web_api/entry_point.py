@@ -1,5 +1,6 @@
 import argparse
 import asyncio
+import os
 import sys
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -14,6 +15,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from template_project.web_api.configuration import load_configuration
 from template_project.web_api.ioc.make import make_ioc
+from template_project.web_api.routes import healthcheck, user
 
 LOG_CONFIG: Final = {
     "version": 1,
@@ -53,15 +55,15 @@ def make_asgi_application(
         version="1.0.0",
         openapi_url="/openapi.json",
     )
-    origins = ["*"]
-
     app.add_middleware(
         CORSMiddleware,
-        allow_origins=origins,
+        allow_origins=["*"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
     )
+    app.include_router(user.router)
+    app.include_router(healthcheck.router)
 
     setup_dishka(container=ioc, app=app)
 
@@ -91,13 +93,17 @@ def main() -> None:
         asyncio.set_event_loop_policy(WindowsSelectorEventLoopPolicy())
 
     arg_parser = argparse.ArgumentParser()
-    subparsers = arg_parser.add_subparsers()
-
-    web_api_parser = subparsers.add_parser("web_api")
-    web_api_parser.add_argument("configuration", dest="configuration", type=Path)
+    arg_parser.add_argument("configuration", default=None)
 
     args = arg_parser.parse_args()
-    _main(args.configuration)
+    configuration_path = args.configuration or os.getenv("CONFIGURATION_PATH")
+
+    if configuration_path is None:
+        raise RuntimeError(
+            "pass the path to the config or specify it in the environment variables `CONFIGURATION_PATH`",
+        )
+
+    _main(Path(configuration_path))
 
 
 if __name__ == "__main__":

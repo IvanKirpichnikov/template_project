@@ -8,13 +8,13 @@ from template_project.web_api.configuration import DatabaseConfiguration
 
 class ConnectionProvider(Provider):
     @provide(scope=Scope.APP)
-    async def make_engine(self, configuration: DatabaseConfiguration) -> AsyncIterable[AsyncEngine]:
+    async def engine(self, configuration: DatabaseConfiguration) -> AsyncIterable[AsyncEngine]:
         engine = create_async_engine(configuration.url.get_value())
         yield engine
         await engine.dispose()
 
-    @provide()
-    async def make_connection(self, engine: AsyncEngine) -> AsyncIterable[AsyncSession]:
+    @provide(scope=Scope.REQUEST)
+    async def async_session(self, engine: AsyncEngine) -> AsyncIterable[AsyncSession]:
         session = AsyncSession(
             bind=engine,
             expire_on_commit=True,

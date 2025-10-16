@@ -1,0 +1,60 @@
+services:
+  web_api:
+    image: template_project_deploy
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./config.toml:/app/config.toml:ro
+    command: web_api_cli /app/config.toml
+    depends_on:
+      - postgresql
+    expose:
+      - "8080"
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:8080/healthcheck/" ]
+      interval: 2s
+
+  tests:
+    image: template_project_tests
+    volumes:
+      - ./cov/:/app/cov
+      - ./tests:/app/tests:ro
+      - ./config.toml:/app/config.toml:ro
+    environment:
+      CONFIGURATION_PATH: /app/config.toml
+    command: coverage run --source src -m pytest && coverage report && coverage xml -o ./cov/coverage.xml
+    depends_on:
+      web_api:
+        condition: service_healthy
+
+  migrations:
+    image: template_project_migrations
+    environment:
+      CONFIGURATION_PATH: /app/config.toml
+    volumes:
+      - ./alembic.ini:/app/alembic.ini:ro
+      - ./config.toml:/app/config.toml:ro
+      - ./src/template_project/migrations:/app/src/template_project/migrations
+    depends_on:
+      - postgresql
+
+  postgresql:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: template_project_password
+      POSTGRES_USER: template_project_user
+      POSTGRES_DB: template_project_db
+      PGDATA: /var/lib/postgresql/data/
+    expose:
+      - "5432"
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgresql_volume:/var/lib/postgresql/data
+
+volumes:
+  redis_volume:
+  postgresql_volume:

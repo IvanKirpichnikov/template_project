@@ -1,12 +1,14 @@
-from typing import override
+from typing import TYPE_CHECKING, override
 
-from template_project.application.access_token.entity import AccessTokenId
 from template_project.application.common.errors import ApplicationError, to_error
+
+if TYPE_CHECKING:
+    from template_project.application.access_token.entity import AccessTokenId
 
 
 @to_error
 class AccessTokenExpiredError(ApplicationError):
-    id_: AccessTokenId
+    id_: "AccessTokenId"
 
     @override
     def __str__(self) -> str:

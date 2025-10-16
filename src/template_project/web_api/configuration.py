@@ -31,6 +31,10 @@ class ServerConfiguration:
     port: int
     access_log: bool
 
+    @property
+    def url(self) -> str:
+        return f"http://{self.host}:{self.port}"
+
 
 @to_configuration
 class Configuration:

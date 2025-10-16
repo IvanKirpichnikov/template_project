@@ -1,7 +1,7 @@
 __all__ = (
+    "access_token_table",
     "meta_data",
     "user_table",
-    "access_token_table",
 )
 
 from sqlalchemy import UUID, Boolean, Column, DateTime, ForeignKey, MetaData, String, Table
